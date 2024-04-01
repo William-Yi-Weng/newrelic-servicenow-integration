@@ -10,32 +10,32 @@ rm -rf .terraform
 
 OPT=$1
 
-terraform init \
-  -backend=true \
+terraform -chdir=infra/ init \
   -reconfigure \
-  infra/
+  -upgrade \
+  -backend=false
+  
 
 case $OPT in
 plan)
-    terraform plan \
+    terraform -chdir=infra/ plan \
         -lock=false \
         -input=false \
-        -out=tf.plan \
-        infra/
+        -out=tf.plan
   ;;
 apply)
     terraform apply \
         -input=false \
         -auto-approve=true \
-        -lock=true \
-        tf.plan
+        -lock=false \
+        ./infra/tf.plan
   ;;
 destroy)
     terraform destroy \
         -input=false \
         -auto-approve=true \
-        -lock=true \
-        tf.plan
+        -lock=false \
+        ./infra/tf.plan
   ;;
 *)
   die 102 "Unknown OPERATION: $OPT"

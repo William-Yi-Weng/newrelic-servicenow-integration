@@ -1,5 +1,4 @@
 terraform {
-  required_version = "~> 0.13.0"
   required_providers {
     newrelic = {
       source  = "newrelic/newrelic"
@@ -9,6 +8,7 @@ terraform {
 }
 
 provider "newrelic" {
-  account_id = local.newrelic.newrelic_account_id
-  region = "US"
+  account_id = local.newrelic.account_id
+  api_key    = local.newrelic.api_key
+  region     = "US"
 }

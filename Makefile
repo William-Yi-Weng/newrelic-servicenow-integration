@@ -1,9 +1,22 @@
+WORKPLACE = infra
 
-build-infra:
-	bash scripts/execute.sh plan
+init:
+		terraform -chdir=$(WORKPLACE) init
 
-deploy-infra:
-	bash scripts/execute.sh apply
+plan: init
+		terraform -chdir=$(WORKPLACE) plan \
+			-input=false \
+			-out=tf.plan
 
-destroy-infra:
-	bash scripts/execute.sh destroy
+apply: init
+		cd $(WORKPLACE) && \
+		terraform apply \
+			-input=false \
+			-auto-approve=true \
+			tf.plan
+
+destroy: init
+		cd $(WORKPLACE) && \
+		terraform destroy \
+			-input=false \
+			-auto-approve=true
