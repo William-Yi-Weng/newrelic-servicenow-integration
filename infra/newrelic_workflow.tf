@@ -26,7 +26,6 @@ resource "newrelic_notification_channel" "webhook_channel" {
             {
             "account_id": {{nrAccountId}},
             "account_name": {{json accumulations.tag.account.[0]}},
-            "node": {{ json accumulations.tag.ci }},
             "closed_violations_count": {{closedIncidentsCount}},
             "open_violations_count": {{openIncidentsCount}},
             "condition_description": "{{escape accumulations.conditionDescription.[0]}}",
@@ -78,9 +77,9 @@ resource "newrelic_workflow" "mypage_workflow" {
     type = "FILTER"
 
     predicate {
-      attribute = "accumulations.tag.node"
+      attribute = "accumulations.tag.ci"
       operator  = "EXACTLY_MATCHES"
-      values    = [local.newrelic.servicenow_tag_key]
+      values    = ["${local.newrelic.servicenow_tag_key}-web", "${local.newrelic.servicenow_tag_key}-host"]
     }
   }
 

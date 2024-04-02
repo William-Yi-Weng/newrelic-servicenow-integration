@@ -53,6 +53,40 @@ resource "newrelic_entity_tags" "mypage_alert_condition_entity_tags" {
 
   tag {
     key    = local.newrelic.servicenow_tag
-    values = [local.newrelic.servicenow_tag_key]
+    values = ["${local.newrelic.servicenow_tag_key}-web"]
+  }
+}
+
+resource "newrelic_nrql_alert_condition" "high_cpu" {
+  account_id                   = local.newrelic.account_id
+  policy_id                    = newrelic_alert_policy.mypage_policy.id
+  type                         = "static"
+  name                         = "Alert for ${local.newrelic.application} High CPU"
+  enabled                      = true
+  violation_time_limit_seconds = 86400
+
+  nrql {
+    query = "SELECT average(`host.cpuPercent`) FROM Metric FACET entity.guid, host.hostname"
+  }
+
+  critical {
+    operator              = "below"
+    threshold             = 85
+    threshold_duration    = 300
+    threshold_occurrences = "at_least_once"
+  }
+  fill_option        = "static"
+  fill_value         = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay  = 120
+}
+
+resource "newrelic_entity_tags" "high_cpu_alert_condition_entity_tags" {
+  guid = newrelic_nrql_alert_condition.high_cpu.entity_guid
+
+  tag {
+    key    = local.newrelic.servicenow_tag
+    values = ["${local.newrelic.servicenow_tag_key}-host"]
   }
 }
