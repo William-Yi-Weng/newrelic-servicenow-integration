@@ -53,7 +53,7 @@ resource "newrelic_entity_tags" "mypage_alert_condition_entity_tags" {
 
   tag {
     key    = local.newrelic.servicenow_tag
-    values = ["${local.newrelic.servicenow_tag_key}-web"]
+    values = ["${local.newrelic.servicenow_tag_key} web"]
   }
 }
 
@@ -87,6 +87,6 @@ resource "newrelic_entity_tags" "high_cpu_alert_condition_entity_tags" {
 
   tag {
     key    = local.newrelic.servicenow_tag
-    values = ["${local.newrelic.servicenow_tag_key}-host"]
+    values = ["${local.newrelic.servicenow_tag_key}"]
   }
 }

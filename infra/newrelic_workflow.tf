@@ -79,7 +79,7 @@ resource "newrelic_workflow" "mypage_workflow" {
     predicate {
       attribute = "accumulations.tag.ci"
       operator  = "EXACTLY_MATCHES"
-      values    = ["${local.newrelic.servicenow_tag_key}-web", "${local.newrelic.servicenow_tag_key}-host"]
+      values    = ["${local.newrelic.servicenow_tag_key} web", "${local.newrelic.servicenow_tag_key}"]
     }
   }
 
